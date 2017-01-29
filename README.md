@@ -48,7 +48,7 @@ cd llvm-3.9.1.src
 SRC_ROOT=`pwd`
 ```
 
-(echo $SRC_ROOT should return /data/data/com.termux/files/home/llvm3.9.1/llvm-3.9.1.src)
+(`echo $SRC_ROOT` should return /data/data/com.termux/files/home/llvm3.9.1/llvm-3.9.1.src)
 
 Now you need a build folder where llvm executables will be put outside of the source folder:
 ```
@@ -114,7 +114,7 @@ https://devtalk.nvidia.com/default/topic/930672/pixel-c-access-to-cuda-/
 
 The situation went a bit out out of hand here. One might call it contrived thinking that the NVIDIA Tegra X1 development kit would look a bit odd and the Pixel C would look so sleek when carried around, as this obviously ignores what a CUDA addict would look like with a Pixel C and no access to CUDA. Amy's post, brief and concise though maybe not explicitly detailed, is the answer to the final question:
 
-*"Anyone has method can make Pixel C supported with CUDA access ? "*       42
+*"Anyone has method can make Pixel C supported with CUDA access ? "* 42
  
 The newest version of NVIDIA CodeWorks for Android 1R5 now provides support for Android Marshmallow and CUDA 7.0 for Tegra X1 devices and is compatible with the higher versions of the Google Pixel C. NVIDIA CodeWorks needs to be installed on an Intel/AMD x64 processor bearing PC running Ubuntu 14.04 (AMD64). Point your Web browser to:
 
@@ -158,7 +158,7 @@ ln -s lib64/ lib
 cd lib64
 ln -s /system/vendor64/libnvcompute.so libcuda.so
 ```
-The NVIDIA CUDA for Android files are now in /data/data/com.termux/files/usr/local/cuda-7.0 and we have a clang for compiling CUDA C++. What is still missing are the NVIDIA tools ptxas and fatbinary for generating device code that can be embedded in executables. However, with the present installation you can generate ptx files that can be loaded using the CUDA driver API (see the vectorAddDrv or matrixMulDrv CUDA samples). It is a good idea to test for functionality at this point. We need to set the LD_LIBRARY_PATH, which currently points to /data/data/com.termux/usr/lib (use echo $LD_LIBRARY_PATH). For this we add to our ~/cuda and ~/normal shell scripts:
+The NVIDIA CUDA for Android files are now in /data/data/com.termux/files/usr/local/cuda-7.0 and we have a clang for compiling CUDA C++. What is still missing are the NVIDIA tools ptxas and fatbinary for generating device code that can be embedded in executables. However, with the present installation you can generate ptx files that can be loaded using the CUDA driver API (see the vectorAddDrv or matrixMulDrv CUDA samples). It is a good idea to test for functionality at this point. We need to set the LD_LIBRARY_PATH, which currently points to /data/data/com.termux/usr/lib (use `echo $LD_LIBRARY_PATH`). For this we add to our ~/cuda and ~/normal shell scripts:
 ```
 echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> ~/normal
 echo "export LD_LIBRARY_PATH=/system/lib64:/data/data/com.termux/files/usr/lib:/data/data/com.termux/files/local/cuda/lib64:/system/vendor/lib64" >> ~/cuda
@@ -187,7 +187,7 @@ Compile vectorAdd_kernel.cu with the clang compiler we build before (ignore link
 ```
 clang++ -target aarch64-linux-android --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-gpu-arch=sm_35 ../../../../usr/local/cuda/include -I../../common/inc -I../../../../usr/include --cuda-device-only -S -o vectorAdd_kernel64.ptx  vectorAdd_kernel.cu
 ```
-A ptx file vectorAdd_kernel64.ptx should now be in the same directors. Use cat vectorAdd_kernel64.ptx to see the ptx code. Next compile the vectorAddDrv.cpp using the compiler comming with Termux gcc (clang 3.9.1):
+A ptx file vectorAdd_kernel64.ptx should now be in the same directors. Use cat vectorAdd_kernel64.ptx to see the ptx code. Next compile the vectorAddDrv.cpp using the gcc compiler installed with Termux (clang 3.9.1 without NVPTX backend):
 ```
 gcc --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-gpu-arch=sm_53 -I../../../../usr/local/cuda/include -I../../common/inc -lgnustl_shared -L /data/data/com.termux/files/usr/local/cuda/lib64 -lcudart -L /system/lib64 -L /system/vendor/lib64 -lnvcompute -o vectorAddDrv vectorAddDrv.cpp
 ```
@@ -220,7 +220,7 @@ cd ~/Downloads
 chmod +x JetPack-L4T-2.2-linux-x64.run
 ./JetPack-L4T-2.2-linux-x64.run
 ```
-When prompted select JETPACK 2.2 – Tegra X1 64 bit. The installer will download all files and then ask to flash the operating system image to a Jetson X1 development board. At this point the installation can be aborted. In the **~/Downloads/Jetpack_2.2/jetpack_download/** folder two archives **cuda-repo-l4t-7-0-local_7.0-76_arm64.deb** contains the ARM64 CUDA 7.0 toolkit and **Tegra_Linux_Sample-Root-Filesystem_R24.1.0_aarch64.tbz2** contains the ARM64 Linux root file system. Use Ubuntu Archive Manager to open these archives and the use drag and drop in the file manager window to extract and copy files and folders from these archieves (on the file right click the mouse to see the options for open).
+When prompted select JETPACK 2.2 – Tegra X1 64 bit. The installer will download all files and then ask to flash the operating system image to a Jetson X1 development board. At this point the installation can be aborted. In the **~/Downloads/Jetpack_2.2/jetpack_download/** folder are two archives: **cuda-repo-l4t-7-0-local_7.0-76_arm64.deb** contains the ARM64 CUDA 7.0 toolkit and **Tegra_Linux_Sample-Root-Filesystem_R24.1.0_aarch64.tbz2** contains the ARM64 Linux root file system. Use Ubuntu Archive Manager to open these archives and then drag and drop between file manager windows to extract and copy files and folders from these archieves (on the file right click the mouse to see the options for open).
 
 From the **Tegra_Linux_Sample-Root-Filesystem_R24.1.0_aarch64.tbz2** archive copy the following files from the **/lib/aarch64-linux-gnu/** to a L4T-files/ folder on a portable drive:
 
