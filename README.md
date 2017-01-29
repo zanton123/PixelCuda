@@ -38,7 +38,7 @@ Move the unpacked clang source folder cfe-3.9.1.src/ into llvm.src/tools/ folder
 
 Enter clang.src/ and set environment variable to source root directory for convenience
 *cd llvm-3.9.1.src
-* SRC_ROOT=`pwd`
+* SRC_ROOT=*`pwd`*
 
 (echo $SRC_ROOT should return /data/data/com.termux/files/home/llvm3.9.1/llvm-3.9.1.src)
 
@@ -60,29 +60,30 @@ In the editor press i for insert mode and add a new line 53:
 
 In the implementation of the function formatHtmlPct() in source line 512 substitute:
 
-std::string Num=std::to_string(Pct);
+ std::string Num=std::to_string(Pct);
 
 with:
-* std::string Num;
-* std::stringstream ss_Num;
-* ss_Num << Pct;
-* Num = ss_Num.str();
-* // substitute for Android error in std::string Num = std::to_string(Pct);
+ std::string Num;
+ std::stringstream ss_Num;
+ ss_Num << Pct;
+ Num = ss_Num.str();
+ // substitute for Android error in std::string Num = std::to_string(Pct);
 
 Press ESC or Ctrl+c followed by :wq ENTER to write and close the file and continue building:
-make
+* make
 
 This time the entire build of llvm should succeed and the executables can be added to the path:
-export PATH=/data/.../home/llvm3.9.1/build/bin:$PATH
+* export PATH=/data/.../home/llvm3.9.1/build/bin:$PATH
 
 To set the PATH in Termux at startup, add above line to the ~/.bashrc shell script. However, this will change your compiler system wide and could interfere with Termux at some point. It is a better idea to make a separate shell script to set the path for CUDA development and before this store the current Termux PATH in a script to revert:
-echo $PATH > normal
-echo "export PATH=~/llvm3.9.1/build/bin:$PATH" > ~/cuda
+* echo $PATH > normal
+* echo "export PATH=~/llvm3.9.1/build/bin:$PATH" > ~/cuda
 
 Use source to invoke the script to switch to CUDA development:
-. ~/cuda
+* . ~/cuda
+
 ... and revert back to normal:
-. ~/normal
+* . ~/normal
 
 
 ##NVIDIA CUDA for Android
@@ -96,7 +97,7 @@ https://devtalk.nvidia.com/default/topic/930672/pixel-c-access-to-cuda-/
 
 The situation went a bit out out of hand here. One might call it contrived thinking that the NVIDIA Tegra X1 development kit would look a bit odd and the Pixel C would look so sleek when carried around, as this obviously ignores what a CUDA addict would look like with a Pixel C and no access to CUDA. Amy's post, brief and concise though maybe not explicitly detailed, is the answer to the final question:
 
-###"Anyone has method can make Pixel C supported with CUDA access ? " - 42
+**"Anyone has method can make Pixel C supported with CUDA access ? "**  '42'
  
 The newest version of NVIDIA CodeWorks for Android 1R5 now provides support for Android Marshmallow and CUDA 7.0 for Tegra X1 devices and is compatible with the higher versions of the Google Pixel C. NVIDIA CodeWorks needs to be installed on an Intel/AMD x64 processor bearing PC running Ubuntu 14.04 (AMD64). Point your Web browser to:
 
