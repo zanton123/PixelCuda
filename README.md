@@ -256,8 +256,8 @@ The ld-2.19.so dynamic loader and the shared libaries are required to run the Li
 ```
 cd ~/../usr/local/cuda-7.0
 mkdir nvvm
-cp -r ~/storage/shared/Downloads/L4T-cuda/bin/* bin/
-cp -r ~/storage/shared/Downloads/L4T-cuda/nvvm/* nvvm/ 
+cp -r ~/storage/shared/Downloads/cuda-7.0/bin/* bin/
+cp -r ~/storage/shared/Downloads/cuda-7.0/nvvm/* nvvm/ 
 ```
 To run ptxas and fatbinary executables for Linux on Android we simply make shell scripts in the /data/data/com.termux/files/usr/bin/ folder using the vim editor:
 ```
