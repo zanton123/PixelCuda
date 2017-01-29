@@ -245,7 +245,7 @@ ln -s libc-2.19.so libc.so.6
 ln -s libm-2.19.so libm.so.6
 ln -s libdl-2.19.so libdl.so.2
 ln -s libpthread-2.19.so libpthread.so.0
-* ln -s libz.so.1.2.8 libz.so.1
+ln -s libz.so.1.2.8 libz.so.1
 ```
 Add execute permission to the Linux dynamic linker loader:
 ```
