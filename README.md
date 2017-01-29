@@ -40,7 +40,7 @@ Move the unpacked clang source folder cfe-3.9.1.src/ into llvm.src/tools/ folder
 
 Enter clang.src/ and set environment variable to source root directory for convenience
 *cd llvm-3.9.1.src
-* SRC_ROOT= `pwd`
+* SRC_ROOT= $PWD
 
 (echo $SRC_ROOT should return /data/data/com.termux/files/home/llvm3.9.1/llvm-3.9.1.src)
 
