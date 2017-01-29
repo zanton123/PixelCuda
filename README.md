@@ -60,14 +60,14 @@ In the editor press i for insert mode and add a new line 53:
 
 In the implementation of the function formatHtmlPct() in source line 512 substitute:
 
- std::string Num=std::to_string(Pct);
+    std::string Num=std::to_string(Pct);
 
 with:
- std::string Num;
- std::stringstream ss_Num;
- ss_Num << Pct;
- Num = ss_Num.str();
- // substitute for Android error in std::string Num = std::to_string(Pct);
+    std::string Num;
+    std::stringstream ss_Num;
+    ss_Num << Pct;
+    Num = ss_Num.str();
+    // substitute for Android error in std::string Num = std::to_string(Pct);
 
 Press ESC or Ctrl+c followed by :wq ENTER to write and close the file and continue building:
 * make
