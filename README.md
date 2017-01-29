@@ -112,7 +112,7 @@ The CUDA toolkit includes several CUDA libraries, of which the CUDA runtime libr
 
 https://devtalk.nvidia.com/default/topic/930672/pixel-c-access-to-cuda-/
 
-The situation went a bit out out of hand here. One might call it contrived thinking that the NVIDIA Tegra X1 development kit would look a bit odd and the Pixel C would look so sleek when carried around, as this obviously ignores what a CUDA addict would look like with a Pixel C and no access to CUDA. Amy's post, brief and concise though maybe not explicitly detailed, is the answer to the final question:
+The situation went a bit out of hand here. One might call it contrived thinking that the NVIDIA Tegra X1 development kit would look a bit odd and the Pixel C would look so sleek when carried around, as this obviously ignores what a CUDA addict would look like with a Pixel C and no access to CUDA. Amy's post, brief and concise though maybe not explicitly detailed, is the answer to the final question:
 
 *"Anyone has method can make Pixel C supported with CUDA access ? "* 42
  
