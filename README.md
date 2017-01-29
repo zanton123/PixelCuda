@@ -1,4 +1,4 @@
-﻿Compiling and running CUDA applications on the Google Pixel C
+#Compiling and running CUDA applications on the Google Pixel C
 using the GPUCC feature of clang, ptxas and fatbinary
 
 One of the features for considering  a Pixel C is the NVIDIA Tegra X1 processor and its GPU that features 256 Maxwell CUDA cores. There are not many devices with the Tegra X1 in the portable category. By building a productivity device Google might cater here to the casual CUDA C++, PTX and MAXAS coder community that are now free to code away from home and internet. The device is potentially of high therapeutic value for CUDA addicts, for which there can be no cure obviously, but cannot be clinically certified until the Pixel C does CUDA.
