@@ -17,11 +17,13 @@ https://termux.com/help.html
 Termux already comes with a package of clang 3.9.1, which will compile CUDA C++ to LLVM intermediate representation (IR) code but you will need the LLVM NVPTX backend to make PTX files. In addition the ptxas and fatbinary executables from the NVIDIA Linux for Tegra X1 toolkit need to be interfaced to run on Android to generate device code that can be embedded with your executables.
 
 Information on compiling CUDA C++ with LLVM and the NVPTX backend are found at:
+
 http://llvm.org/docs/CompileCudaWithLLVM.html
+
 http://llvm.org/docs/NVPTXUsage.html
 
 Install the following packages from the Termux shell:
-apt install build-essential, cmake, make, perl, python2, wget
+* apt install build-essential, cmake, make, perl, python2, wget
 
 From the home/ folder:
 * mkdir llvm3.9.1
@@ -99,7 +101,7 @@ https://devtalk.nvidia.com/default/topic/930672/pixel-c-access-to-cuda-/
 
 The situation went a bit out out of hand here. One might call it contrived thinking that the NVIDIA Tegra X1 development kit would look a bit odd and the Pixel C would look so sleek when carried around, as this obviously ignores what a CUDA addict would look like with a Pixel C and no access to CUDA. Amy's post, brief and concise though maybe not explicitly detailed, is the answer to the final question:
 
-*"Anyone has method can make Pixel C supported with CUDA access ? " - '42'*
+*"Anyone has method can make Pixel C supported with CUDA access ? "    42*
  
 The newest version of NVIDIA CodeWorks for Android 1R5 now provides support for Android Marshmallow and CUDA 7.0 for Tegra X1 devices and is compatible with the higher versions of the Google Pixel C. NVIDIA CodeWorks needs to be installed on an Intel/AMD x64 processor bearing PC running Ubuntu 14.04 (AMD64). Point your Web browser to:
 
@@ -156,7 +158,7 @@ First try to compile the deviceQuery sample:
 This should compile and give an executable deviceQuery in the same folder. To run type:
 * ./deviceQuery
 
-You should see no a list of capabilities of your Tegra X1 Maxwell GPU. Next navigate to the vectorAddDrv example.
+You should see now a list of capabilities of your Tegra X1 Maxwell GPU! Next navigate to the vectorAddDrv example.
 * cd ../../0_Simple/vectorAddDrv/
 
 Compile vectorAdd_kernel.cu with the clang compiler we build before (ignore linker warning):
@@ -177,11 +179,11 @@ vectorAdd_kernel.bc LLVM IR byte code can be passed to the NVPTX backend:
 
 ##NVIDIA Linux for Tegra
 
-We are presently stuck at PTX and cannot go any further with open source tools. NVIDIA also does not supply CUDA compiler components that run natively on Android (the toolkit contains onyl profiling and analysis tools ported to Android). However, there are ARM64 versions for the Tegra X1 in the Linux for Tegra Archive: 
+We are presently stuck at PTX and cannot go any further with open source tools. NVIDIA also does not supply CUDA compiler components that run natively on Android (the toolkit contains only profiling and analysis tools ported to Android). However, there are ARM64 versions for the Tegra X1 in the Linux for Tegra Archive: 
 
 https://developer.nvidia.com/embedded/linux-tegra-archive
 
-From the features Jetson TX1 R24.1 – May 2016 contains the CUDA 7.0 tools matching our CUDA installation and can be downloaded from:
+Jetson TX1 R24.1 – May 2016 contains the CUDA 7.0 tools matching our CUDA installation and can be downloaded from:
 
 https://developer.nvidia.com/embedded/downloads
 
