@@ -171,7 +171,7 @@ mv ../usr/local/cuda/samples/ CUDA-7.0-samples/
 ```
 First try to compile the **deviceQuery** sample:
 ```
-cd 1_Utilities/deviceQuery
+cd CUDA-7-0-samples/1_Utilities/deviceQuery
 . ~/cuda
 gcc --verbose --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-gpu-arch=sm_53 -I../../../../usr/local/cuda/include -I../../common/inc -lgnustl_shared -L /data/data/com.termux/files/usr/local/cuda/lib64 -lcudart -L /sytsem/lib64 -L /system/vendor/lib64 -lnvcompute -o deviceQuery deviceQuery.cpp
 ```
