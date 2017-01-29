@@ -53,18 +53,22 @@ Enter the ~/llvm3.9.1.src/build/ folder and build llvm with the Aarch64 and NVPT
 
 Most of llvm compiles in Termux but there seems to be a missing definition of the std::to_string() method in Android which makes llvm3.9.1.src/tools/sancov/sancov.cc fail in line 512. If the error occurs you can edit cancov.cc to insert a workaround using the c++ stringstream API.
 
-*vi ../llvm3.9.1.src/tools/sancov.cc
+* vi ../llvm3.9.1.src/tools/sancov.cc
 
 In the editor press i for insert mode and add a new line 53:
 * #include <sstream> // try to get around std::to_string() ERROR with construct line 512 ff
+
 In the implementation of the function formatHtmlPct() in source line 512 substitute:
-* std::string Num=std::to_string(Pct);
+
+std::string Num=std::to_string(Pct);
+
 with:
 * std::string Num;
 * std::stringstream ss_Num;
 * ss_Num << Pct;
 * Num = ss_Num.str();
 * // substitute for Android error in std::string Num = std::to_string(Pct);
+
 Press ESC or Ctrl+c followed by :wq ENTER to write and close the file and continue building:
 make
 
