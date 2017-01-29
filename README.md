@@ -23,12 +23,14 @@ http://llvm.org/docs/CompileCudaWithLLVM.html
 http://llvm.org/docs/NVPTXUsage.html
 
 Install the following packages from the Termux shell:
-* apt install build-essential, cmake, make, perl, python2, wget
-
+```
+apt install build-essential, cmake, make, perl, python2, wget
+```
 From the home/ folder:
-* mkdir llvm3.9.1
-* cd llvm3.9.1
-
+```
+mkdir llvm3.9.1
+cd llvm3.9.1
+```
 Download LLVM and Clang source code version 3.9.1 from http://releases.llvm.org/download.html to your Download folder using your Web browser then move the files into the current home/llvm3.9.1/ folder and unpack the source:
 * mv ~/storage/shared/Download/llvm-3.9.1.src.tar.gz ./
 * mv ~/storage/shared/Download/cfe-3.9.1.src.tar.gz ./
