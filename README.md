@@ -101,13 +101,14 @@ https://devtalk.nvidia.com/default/topic/930672/pixel-c-access-to-cuda-/
 
 The situation went a bit out out of hand here. One might call it contrived thinking that the NVIDIA Tegra X1 development kit would look a bit odd and the Pixel C would look so sleek when carried around, as this obviously ignores what a CUDA addict would look like with a Pixel C and no access to CUDA. Amy's post, brief and concise though maybe not explicitly detailed, is the answer to the final question:
 
-*"Anyone has method can make Pixel C supported with CUDA access ? "    42*
+*"Anyone has method can make Pixel C supported with CUDA access ? "*
+42
  
 The newest version of NVIDIA CodeWorks for Android 1R5 now provides support for Android Marshmallow and CUDA 7.0 for Tegra X1 devices and is compatible with the higher versions of the Google Pixel C. NVIDIA CodeWorks needs to be installed on an Intel/AMD x64 processor bearing PC running Ubuntu 14.04 (AMD64). Point your Web browser to:
 
 https://developer.nvidia.com/gameworksdownload#?dn=codeworks-for-android-1r5
 
-and select **Codeworks for Android 1R5 2016/09/07 DOWNLOADS Ubuntu (64 bit)** in your Web browser. You will be asked to sign into your NVIDIA Developer program account. If not a member yet, it is time to register with NVIDIA and signup, which is usually quick. You can then download the **CodeWorksforAndroid-1R5-linux-x64.run** file. Locate the file in the Downloads folder and add execute permission and run in a Ubuntu terminal (not on the Pixel C):
+and select **Codeworks for Android 1R5 2016/09/07 DOWNLOADS Ubuntu (64 bit)** in your Web browser. You will be asked to sign into your NVIDIA Developer program account. If not a member yet, it is time to register with NVIDIA and signup, which is usually quick. You can then download the **CodeWorksforAndroid-1R5-linux-x64.run** file. Locate the file in the Downloads folder, add execute permission, and run in an Ubuntu terminal (not on the Pixel C):
 
 * cd Downloads/
 * chmod +x CodeWorksforAndroid-1R5-linux-x64.run
