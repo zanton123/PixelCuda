@@ -307,7 +307,7 @@ An output ending with "Test PASSED Done" is an encouraging sign and you can take
 ##Limitations
 
 ###CUDA 7.5 on the Pixel C
-CUDA 7.0 is the latest version of libcudart.so in the NVIDIA Codeworks for Android toolkit. We  need a CUDA runtime library for Android and  cannot use a newer versions from the Linux for Tegra development kit. Therefore the device code NVVM library is only available up to Compute Capability 3.5 (Tegra X1 has Compute Capability 5.3) and 16 bit floats are missing.
+CUDA 7.0 is the latest version of libcudart.so in the NVIDIA Codeworks for Android toolkit. We  need to wait on a newer CUDA runtime library for Android and cannot use a the newer versions from the Linux for Tegra development kit as these ELFs will not work with libnvcompute.so on the Pixel C. Therefore the device code NVVM library is only available up to Compute Capability 3.5 (Tegra X1 has Compute Capability 5.3) and 16 bit floats are missing.
 
 ###32 bit armv7l CUDA applications on the Pixel C
 Google Pixel C has support for armv7l libraries including a 32-bit version of libnvcompute.so in /system/vendor/lib, which can be used to run armv7l CUDA applications. Compiling 32-bit CUDA requires the armv7l libraries from the Codeworks for Android CUDA development kit, changes to the clang command line arguments, and setting LD_LIBRARY_PATH to point at the /system/lib;/system/vendor/lib folders.
