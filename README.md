@@ -38,7 +38,7 @@ Move the unpacked clang source folder cfe-3.9.1.src/ into llvm.src/tools/ folder
 
 Enter clang.src/ and set environment variable to source root directory for convenience
 *cd llvm-3.9.1.src
-* SRC_ROOT=*`pwd`*
+* SRC_ROOT= `pwd`
 
 (echo $SRC_ROOT should return /data/data/com.termux/files/home/llvm3.9.1/llvm-3.9.1.src)
 
@@ -56,7 +56,8 @@ Most of llvm compiles in Termux but there seems to be a missing definition of th
 * vi ../llvm3.9.1.src/tools/sancov.cc
 
 In the editor press i for insert mode and add a new line 53:
-* #include <sstream> // try to get around std::to_string() ERROR with construct line 512 ff
+
+    #include <sstream> // try to get around std::to_string() ERROR with construct line 512 ff
 
 In the implementation of the function formatHtmlPct() in source line 512 substitute:
 
@@ -98,80 +99,80 @@ https://devtalk.nvidia.com/default/topic/930672/pixel-c-access-to-cuda-/
 
 The situation went a bit out out of hand here. One might call it contrived thinking that the NVIDIA Tegra X1 development kit would look a bit odd and the Pixel C would look so sleek when carried around, as this obviously ignores what a CUDA addict would look like with a Pixel C and no access to CUDA. Amy's post, brief and concise though maybe not explicitly detailed, is the answer to the final question:
 
-**"Anyone has method can make Pixel C supported with CUDA access ? "**  '42'
+*"Anyone has method can make Pixel C supported with CUDA access ? " - '42'*
  
 The newest version of NVIDIA CodeWorks for Android 1R5 now provides support for Android Marshmallow and CUDA 7.0 for Tegra X1 devices and is compatible with the higher versions of the Google Pixel C. NVIDIA CodeWorks needs to be installed on an Intel/AMD x64 processor bearing PC running Ubuntu 14.04 (AMD64). Point your Web browser to:
 
 https://developer.nvidia.com/gameworksdownload#?dn=codeworks-for-android-1r5
 
-and select Codeworks for Android 1R5 2016/09/07 DOWNLOADS Ubuntu (64 bit) in your Web browser. You will be asked to sign into your NVIDIA Developer program account. If not a member yet, it is time to register with NVIDIA and signup, which is usually quick. You can then download the CodeWorksforAndroid-1R5-linux-x64.run file. Locate the file in the Downloads folder and add execute permission and run in a Ubuntu terminal (not on the Pixel C):
+and select **Codeworks for Android 1R5 2016/09/07 DOWNLOADS Ubuntu (64 bit)** in your Web browser. You will be asked to sign into your NVIDIA Developer program account. If not a member yet, it is time to register with NVIDIA and signup, which is usually quick. You can then download the **CodeWorksforAndroid-1R5-linux-x64.run** file. Locate the file in the Downloads folder and add execute permission and run in a Ubuntu terminal (not on the Pixel C):
 
-cd Downloads/
-chmod +x CodeWorksforAndroid-1R5-linux-x64.run
-./CodeWorksforAndroid-1R5-linux-x64.run
+* cd Downloads/
+* chmod +x CodeWorksforAndroid-1R5-linux-x64.run
+* ./CodeWorksforAndroid-1R5-linux-x64.run
 
 This will install NVIDIA's Android Studio and the CUDA toolkit. If you are runnuing Ubuntu on an old Laptop that has no CUDA installed, the CUDA toolkit might not install automatically with CodeWorks. It is still possible to get the CUDA toolkit by first installing an older version of AndroidWorks or GameWorks for Android and then upgrading to CodeWorks for Android 1R5 with above run file.
 
 After the installation you should have a full development environment for Android including an Eclipse based IDE setup for native Android development. For our purpose the files in the ~/NVPACK/cuda-android-7.0/aarch64-linux-androideabi/ folder are of interest. The include/ folder contains the CUDA header files, the lib64/ folder contains the CUDA libraries including libcudart.so for Android, the samples/ folder with the CUDA samples, and the bin/ folder contains some useful tools for profiling and analysing CUDA applications on Android. Transfer these folders to a portable disk or USB drive.
 In Termux navidate to the usr/ folder and add a local/cuda-7.0/ folder:
-cd ~/../usr
-mkdir local
-cd local
-mkdir cuda-7.0
+* cd ~/../usr
+* mkdir local
+* cd local
+* mkdir cuda-7.0
 
 Add a symbolic link to cuda:
-ln -s cuda-7.0 cuda
+* ln -s cuda-7.0 cuda
 
 Copy the files from your portable drive to the Download folder using a file manager App (eg. ES File Explorer). Then copy the files and all subfolders to the usr/local/cuda-7.0/ folder:
-cd cuda-7.0
-mkdir bin
-cp -r ~/storage/shared/Downloads/cuda-android-7.0/aarch64-linux-androideabi/bin/* bin/
-mkdir include
-cp -r ~/storage/shared/Downloads/cuda-android-7.0/aarch64-linux-androideabi/include/* include/
-mkdir lib64
-cp -r ~/storage/shared/Downloads/cuda-android-7.0/aarch64-linux-androideabi/lib64/* lib64/
-mkdir samples
-cp -r ~/storage/shared/Downloads/cuda-android-7.0/aarch64-linux-androideabi/samples/* samples/
+* cd cuda-7.0
+* mkdir bin
+* cp -r ~/storage/shared/Downloads/cuda-android-7.0/aarch64-linux-androideabi/bin/* bin/
+* mkdir include
+* cp -r ~/storage/shared/Downloads/cuda-android-7.0/aarch64-linux-androideabi/include/* include/
+* mkdir lib64
+* cp -r ~/storage/shared/Downloads/cuda-android-7.0/aarch64-linux-androideabi/lib64/* lib64/
+* mkdir samples
+* cp -r ~/storage/shared/Downloads/cuda-android-7.0/aarch64-linux-androideabi/samples/* samples/
 
 Now add a symbolic link for lib and libcuda.so:
-ln -s lib64/ lib
-cd lib64
-ln -s /system/vendor64/libnvcompute.so libcuda.so
+* ln -s lib64/ lib
+* cd lib64
+* ln -s /system/vendor64/libnvcompute.so libcuda.so
 
 The NVIDIA CUDA for Android files are now in /data/data/com.termux/files/usr/local/cuda-7.0 and we have a clang for compiling CUDA C++. What is still missing are the NVIDIA tools ptxas and fatbinary for generating device code that can be embedded in executables. However, with the present installation you can generate ptx files that can be loaded using the CUDA driver API (see the vectorAddDrv or matrixMulDrv CUDA samples). It is a good idea to test for functionality at this point. We need to set the LD_LIBRARY_PATH, which currently points to /data/data/com.termux/usr/lib (use echo $LD_LIBRARY_PATH). For this we add to our ~/cuda and ~/normal shell scripts:
-echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> ~/normal
-echo "export LD_LIBRARY_PATH=/system/lib64:/data/data/com.termux/files/usr/lib:/data/data/com.termux/files/local/cuda/lib64:/system/vendor/lib64" >> ~/cuda
+* echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> ~/normal
+* echo "export LD_LIBRARY_PATH=/system/lib64:/data/data/com.termux/files/usr/lib:/data/data/com.termux/files/local/cuda/lib64:/system/vendor/lib64" >> ~/cuda
 
 Move the cuda samples into the home folder:
-cd ~
-mkdir CUDA-7.0-samples
-mv ../usr/local/cuda/samples/ CUDA-7.0-samples/
+* cd ~
+* mkdir CUDA-7.0-samples
+* mv ../usr/local/cuda/samples/ CUDA-7.0-samples/
 
 First try to compile the deviceQuery sample:
-cd 1_Utilities/deviceQuery
-. ~/cuda
-gcc --verbose --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-gpu-arch=sm_53 -I../../../../usr/local/cuda/include -I../../common/inc -lgnustl_shared -L /data/data/com.termux/files/usr/local/cuda/lib64 -lcudart -L /sytsem/lib64 -L /system/vendor/lib64 -lnvcompute -o deviceQuery deviceQuery.cpp
+* cd 1_Utilities/deviceQuery
+* . ~/cuda
+* gcc --verbose --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-gpu-arch=sm_53 -I../../../../usr/local/cuda/include -I../../common/inc -lgnustl_shared -L /data/data/com.termux/files/usr/local/cuda/lib64 -lcudart -L /sytsem/lib64 -L /system/vendor/lib64 -lnvcompute -o deviceQuery deviceQuery.cpp
 
 This should compile and give an executable deviceQuery in the same folder. To run type:
-./deviceQuery
+* ./deviceQuery
 
 You should see no a list of capabilities of your Tegra X1 Maxwell GPU. Next navigate to the vectorAddDrv example.
-cd ../../0_Simple/vectorAddDrv/
+* cd ../../0_Simple/vectorAddDrv/
 
 Compile vectorAdd_kernel.cu with the clang compiler we build before (ignore linker warning):
-clang++ -target aarch64-linux-android --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-gpu-arch=sm_35 ../../../../usr/local/cuda/include -I../../common/inc -I../../../../usr/include --cuda-device-only -S -o vectorAdd_kernel64.ptx  vectorAdd_kernel.cu
+* clang++ -target aarch64-linux-android --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-gpu-arch=sm_35 ../../../../usr/local/cuda/include -I../../common/inc -I../../../../usr/include --cuda-device-only -S -o vectorAdd_kernel64.ptx  vectorAdd_kernel.cu
 
 A ptx file vectorAdd_kernel64.ptx should now be in the same directors. Use cat vectorAdd_kernel64.ptx to see the ptx code. Next compile the vectorAddDrv.cpp using the compiler comming with Termux gcc (clang 3.9.1):
-gcc --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-gpu-arch=sm_53 -I../../../../usr/local/cuda/include -I../../common/inc -lgnustl_shared -L /data/data/com.termux/files/usr/local/cuda/lib64 -lcudart -L /system/lib64 -L /system/vendor/lib64 -lnvcompute -o vectorAddDrv vectorAddDrv.cpp
+* gcc --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-gpu-arch=sm_53 -I../../../../usr/local/cuda/include -I../../common/inc -lgnustl_shared -L /data/data/com.termux/files/usr/local/cuda/lib64 -lcudart -L /system/lib64 -L /system/vendor/lib64 -lnvcompute -o vectorAddDrv vectorAddDrv.cpp
 
 You can run the vectorAddDrv executable in the same folder with:
-./vectorAddDrv
+* ./vectorAddDrv
 
 If the output ends with "Result = PASS" everything looks promising. When troubleshooting consider that we used the compiler that comes with Termux for the .cpp files, and only the .ptx file was generated by the clang version built from source. Errors can be related to either PATH, LD_LIBRARY_PATH, missing files or the Termux clang compiler setup (gcc). You can also use the Termux compiler the generate LLVM IR code from .cu files and then use the NVPTX backend llc from the LLVM version built from source to get ptx code:
-g++ -s --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-device-only -emit-llvm --cuda-gpu-arch=sm_53 -I../../../../usr/local/cuda/include -I../../common/inc vectorAdd_kernel.cu -o vectorAdd_kernel.bc
+* g++ -s --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-device-only -emit-llvm --cuda-gpu-arch=sm_53 -I../../../../usr/local/cuda/include -I../../common/inc vectorAdd_kernel.cu -o vectorAdd_kernel.bc
 
 vectorAdd_kernel.bc LLVM IR byte code can be passed to the NVPTX backend:
-llc -mtriple=nvptx64-nvidia-cuda -filetype=asm vectorAdd_kernel.bc -o vectorAdd_kernel64.ptx
+* llc -mtriple=nvptx64-nvidia-cuda -filetype=asm vectorAdd_kernel.bc -o vectorAdd_kernel64.ptx
 
 
 ##NVIDIA Linux for Tegra
@@ -184,82 +185,83 @@ From the features Jetson TX1 R24.1 – May 2016 contains the CUDA 7.0 tools matc
 
 https://developer.nvidia.com/embedded/downloads
 
-Scroll down the list and select JetPack for L4T 2.2 2016/06/15 for download on your Ubuntu PC. Locate JetPack-L4T-2.2-linux-x64.run in an Ubuntu terminal and run:
-cd ~/Downloads
-chmod +x JetPack-L4T-2.2-linux-x64.run
-./JetPack-L4T-2.2-linux-x64.run
+Scroll down the list and select **JetPack for L4T 2.2 2016/06/15** for download on your Ubuntu PC. Locate **JetPack-L4T-2.2-linux-x64.run** file in an Ubuntu terminal and run:
+* cd ~/Downloads
+* chmod +x JetPack-L4T-2.2-linux-x64.run
+* ./JetPack-L4T-2.2-linux-x64.run
 
-When prompted select JETPACK 2.2 – Tegra X1 64 bit. The installer will download all files and then ask to flash the operating system image to a Jetson X1 development board. At this point the installation can be aborted. In the ~/Downloads/Jetpack_2.2/jetpack_download/ folder two archives cuda-repo-l4t-7-0-local_7.0-76_arm64.deb contains the ARM64 CUDA 7.0 toolkit and Tegra_Linux_Sample-Root-Filesystem_R24.1.0_aarch64.tbz2 contains the ARM64 Linux root file system. Use Ubuntu Archive Manager to open these archives and the use drag and drop in the file manager window to extract and copy files and folders from these archieves (on the file right click the mouse to see the options for open).
+When prompted select JETPACK 2.2 – Tegra X1 64 bit. The installer will download all files and then ask to flash the operating system image to a Jetson X1 development board. At this point the installation can be aborted. In the **~/Downloads/Jetpack_2.2/jetpack_download/** folder two archives **cuda-repo-l4t-7-0-local_7.0-76_arm64.deb** contains the ARM64 CUDA 7.0 toolkit and **Tegra_Linux_Sample-Root-Filesystem_R24.1.0_aarch64.tbz2** contains the ARM64 Linux root file system. Use Ubuntu Archive Manager to open these archives and the use drag and drop in the file manager window to extract and copy files and folders from these archieves (on the file right click the mouse to see the options for open).
 
-From the Tegra_Linux_Sample-Root-Filesystem_R24.1.0_aarch64.tbz2 archive copy the following files from the /lib/aarch64-linux-gnu/ to a L4T-files/ folder on a portable drive:
+From the **Tegra_Linux_Sample-Root-Filesystem_R24.1.0_aarch64.tbz2** archive copy the following files from the **/lib/aarch64-linux-gnu/** to a L4T-files/ folder on a portable drive:
 
-ld-2.19.so
-libc-2.19.so
-libm-2.19.so
-libdl-2.19.so
-libpthread-2.19.so
-libz.so.1.2.8
+    ld-2.19.so
+    libc-2.19.so
+    libm-2.19.so
+    libdl-2.19.so
+    libpthread-2.19.so
+    libz.so.1.2.8
 
 Copy the L4T-files/ folder to the Download folder on the Pixel C and move them to a new /data/data/com.termux/files/usr/lib64/ folder (to separate Linux and Android binaries):
-cd ~/../usr
-mkdir lib64
-cp ~/storage/shared/Download/L4T-files/* lib64/
+* cd ~/../usr
+* mkdir lib64
+* cp ~/storage/shared/Download/L4T-files/* lib64/
 
 Make symbolic links in the same folder (ie lib64/) as follows:
-cd lib64
-ln -s ld-2.19.so ld-linux-aarch64.so.1
-ln -s libc-2.19.so libc.so.6
-ln -s libm-2.19.so libm.so.6
-ln -s libdl-2.19.so libdl.so.2
-ln -s libpthread-2.19.so libpthread.so.0
-ln -s libz.so.1.2.8 libz.so.1
+* cd lib64
+* ln -s ld-2.19.so ld-linux-aarch64.so.1
+* ln -s libc-2.19.so libc.so.6
+* ln -s libm-2.19.so libm.so.6
+* ln -s libdl-2.19.so libdl.so.2
+* ln -s libpthread-2.19.so libpthread.so.0
+* ln -s libz.so.1.2.8 libz.so.1
 
 Add execute permission to the Linux dynamic linker loader:
-cd lib64
-chmod +x ld-2.19.so
+* cd lib64
+* chmod +x ld-2.19.so
 
-The ld-2.19.so dynamic loader and the shared libaries are required to run the Linux 64 bit versions of ptxas and fatbinary which are in the cuda-repo-l4t-7-0-local_7.0-76_arm64.deb archive. Extract /var/cuda-repo-7-0-local/cuda-core-7.0-76_aarch64.deb and copy the /usr/local/cuda-7.0/ folder to a portable drive and then into the Download folder on the Pixel C. 
-Navidate to the cuda-7.0 folder on the Pixel C and copy the bin/ and nvvm/ folders:
-cd ~/../usr/local/cuda-7.0
-mkdir nvvm
-cp -r ~/storage/shared/Downloads/L4T-cuda/bin/* bin/
-cp -r ~/storage/shared/Downloads/L4T-cuda/nvvm/* nvvm/ 
+The ld-2.19.so dynamic loader and the shared libaries are required to run the Linux 64 bit versions of ptxas and fatbinary which are in the **cuda-repo-l4t-7-0-local_7.0-76_arm64.deb** archive. Extract **/var/cuda-repo-7-0-local/cuda-core-7.0-76_aarch64.deb** and copy the **/usr/local/cuda-7.0/** folder to a portable drive and then into the Download folder on the Pixel C. Navidate to the cuda-7.0 folder on the Pixel C and copy the bin/ and nvvm/ folders:
+* cd ~/../usr/local/cuda-7.0
+* mkdir nvvm
+* cp -r ~/storage/shared/Downloads/L4T-cuda/bin/* bin/
+* cp -r ~/storage/shared/Downloads/L4T-cuda/nvvm/* nvvm/ 
 
 To run ptxas and fatbinary executables for Linux on Android we simply make shell scripts in the /data/data/com.termux/files/usr/bin/ folder using the vim editor:
-cd ~/../usr/bin
-vi ptxas
+* cd ~/../usr/bin
+* vi ptxas
 
 Enter insert mode (i) write the following lines in the editor and close (Ctrl+c :wq ENTER): 
 
-#!/data/data/com.termux/files/usr/bin/sh
-/data/data/com.termux/files/usr/lib64/ld-linux-aarch64.so.1 /data/data/com.termux/files/usr/local/cuda-7.0/bin/ptxas $*
+    #!/data/data/com.termux/files/usr/bin/sh
+    /data/data/com.termux/files/usr/lib64/ld-linux-aarch64.so.1 /data/data/com.termux/files/usr/local/cuda-7.0/bin/ptxas $*
 
-vi fatbinary
+* vi fatbinary
 
 Enter insert mode (i) write the following lines in the editor and close (Ctrl+c :wq ENTER): 
 
-#!/data/data/com.termux/files/usr/bin/sh
-/data/data/com.termux/files/usr/lib64/ld-linux-aarch64.so.1 /data/data/com.termux/files/usr/local/cuda-7.0/bin/fatbinary $*
+    #!/data/data/com.termux/files/usr/bin/sh
+    /data/data/com.termux/files/usr/lib64/ld-linux-aarch64.so.1 /data/data/com.termux/files/usr/local/cuda-7.0/bin/fatbinary $*
 
 To make it work we also need to add the usr/lib64 folder to the LD_LIBRARY_PATH.
 
-vi ~/cuda
+* vi ~/cuda
 
 In the editor (i) add :/data/data/com.termux/files/usr/lib64 to the LD_LIBRARY_PATH which then should read as follows:
-export LD_LIBRARY_PATH=/system/lib64:/data/data/com.termux/files/usr/lib:/data/data/com.termux/files/local/cuda/lib64:/system/vendor/lib64:/data/data/com.termux/files/usr/lib64
+
+    export PATH=~/llvm3.9.1/build/bin:$PATH
+    export LD_LIBRARY_PATH=/system/lib64:/data/data/com.termux/files/usr/lib:/data/data/com.termux/files/local/cuda/lib64:/system/vendor/lib64:/data/data/com.termux/files/usr/lib64
 
 Then close the file with Ctrl+c :wq ENTER. 
 
 Note: There is an incompatibility between /data/data/com.termux/files/usr/lib/libunwind.so and /system/lib64/libunwind.so. As libnvcompute.so depends on the version in /system/lib64 we set this first in the LD_LIBRARY_PATH. LD_LIBRARY_PATH is switched back with the ~/normal shell script for running apt and other Termux executables.
 
 Now it is time to test a real CUDA runtime executable. For this enter the vectorAdd sample folder, compile and run the sample:
-cd ~/CUDA-7.0-samples/0_Simple/vectorAdd
-. ~/cuda
-clang++ -target aarch64-linux-android --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-gpu-arch=sm_35 -fPIC -pie -I../../../../usr/local/cuda/include -I../../common/inc -I../../../../usr/include --sysroot=/data/data/com.termux/files/usr -L /system/lib64 -L /system/verdor/lib64 -lnvcompute -lgnustl_shared _L /data/data/com.termux/files/usr/local/cuda/lib64 -lcudart -o vectorAdd vectorAdd.cu -v
+* cd ~/CUDA-7.0-samples/0_Simple/vectorAdd
+* . ~/cuda
+* clang++ -target aarch64-linux-android --cuda-path=/data/data/com.termux/files/usr/local/cuda --cuda-gpu-arch=sm_35 -fPIC -pie -I../../../../usr/local/cuda/include -I../../common/inc -I../../../../usr/include --sysroot=/data/data/com.termux/files/usr -L /system/lib64 -L /system/verdor/lib64 -lnvcompute -lgnustl_shared _L /data/data/com.termux/files/usr/local/cuda/lib64 -lcudart -o vectorAdd vectorAdd.cu -v
 
 An executable file vectorAdd should have been generated that can be run with:
 
-./vectorAdd
+* ./vectorAdd
 
 An output ending with "Test PASSED Done" is an encouraging sign and you can take it from there. Good luck! The Pixel C CUDA strategy would have been all but impossible if not for Amy Wong, Fredrik Fornwall, and visionary teams at NVIDIA and Google. Thanks!
 
