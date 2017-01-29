@@ -32,29 +32,35 @@ mkdir llvm3.9.1
 cd llvm3.9.1
 ```
 Download LLVM and Clang source code version 3.9.1 from http://releases.llvm.org/download.html to your Download folder using your Web browser then move the files into the current home/llvm3.9.1/ folder and unpack the source:
-* mv ~/storage/shared/Download/llvm-3.9.1.src.tar.gz ./
-* mv ~/storage/shared/Download/cfe-3.9.1.src.tar.gz ./
-* tar -xvJf llvm.tar.xz
-* tar -xvJf clang.tar.xz
-
+```
+mv ~/storage/shared/Download/llvm-3.9.1.src.tar.gz ./
+mv ~/storage/shared/Download/cfe-3.9.1.src.tar.gz ./
+tar -xvJf llvm.tar.xz
+tar -xvJf clang.tar.xz
+```
 Move the unpacked clang source folder cfe-3.9.1.src/ into llvm.src/tools/ folder:
-* mv cfe-3.9.1.src llvm-3.9.1.src/tools/
-
+```
+mv cfe-3.9.1.src llvm-3.9.1.src/tools/
+```
 Enter clang.src/ and set environment variable to source root directory for convenience
-*cd llvm-3.9.1.src
-* SRC_ROOT= $PWD
+```
+cd llvm-3.9.1.src
+SRC_ROOT=`pwd`
+```
 
 (echo $SRC_ROOT should return /data/data/com.termux/files/home/llvm3.9.1/llvm-3.9.1.src)
 
 Now you need a build folder where llvm executables will be put outside of the source folder:
-* cd ~/llvm3.9.1
-* mkdir build
-
+```
+cd ~/llvm3.9.1
+mkdir build
+```
 Enter the ~/llvm3.9.1.src/build/ folder and build llvm with the Aarch64 and NVPTX targets:
-* cd build
-* cmake -G “Unix Makefiles” -DMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=prefix=/data/data/com.termux/files/usr/llvm -DLLVM_TARGETS_TO_BUILD=”Aarch64;NVPTX” -DCMAKE_C_COMPILER=/data/data/com.termux/files/usr/bin/cc -DCMAKE_CXXCOMPILER=/data/data/com.termux/files/usr/bin/c++ -DCMAKE_ASM_COMPILER=/data/data/com.termux/files/usr/bin/as $SRC_ROOT/
-* make
-
+```
+cd build
+cmake -G “Unix Makefiles” -DMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=prefix=/data/data/com.termux/files/usr/llvm -DLLVM_TARGETS_TO_BUILD=”Aarch64;NVPTX” -DCMAKE_C_COMPILER=/data/data/com.termux/files/usr/bin/cc -DCMAKE_CXXCOMPILER=/data/data/com.termux/files/usr/bin/c++ -DCMAKE_ASM_COMPILER=/data/data/com.termux/files/usr/bin/as $SRC_ROOT/
+make
+```
 Most of llvm compiles in Termux but there seems to be a missing definition of the std::to_string() method in Android which makes llvm3.9.1.src/tools/sancov/sancov.cc fail in line 512. If the error occurs you can edit cancov.cc to insert a workaround using the c++ stringstream API.
 
 * vi ../llvm3.9.1.src/tools/sancov.cc
