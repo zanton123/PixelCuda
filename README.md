@@ -63,6 +63,7 @@ In the implementation of the function formatHtmlPct() in source line 512 substit
     std::string Num=std::to_string(Pct);
 
 with:
+
     std::string Num;
     std::stringstream ss_Num;
     ss_Num << Pct;
