@@ -81,7 +81,7 @@ This time the entire build of llvm should succeed and the executables can be add
 
 To set the PATH in Termux at startup, add above line to the ~/.bashrc shell script. However, this will change your compiler system wide and could interfere with Termux at some point. It is a better idea to make a separate shell script to set the path for CUDA development and before this store the current Termux PATH in a script to revert:
 * echo $PATH > normal
-* echo "export PATH=~/llvm3.9.1/build/bin:$PATH" > ~/cuda
+* echo "export PATH=/data/data/com.termux/files/home/llvm3.9.1/build/bin:$PATH" > ~/cuda
 
 Use source to invoke the script to switch to CUDA development:
 * . ~/cuda
@@ -249,7 +249,7 @@ To make it work we also need to add the usr/lib64 folder to the LD_LIBRARY_PATH.
 
 In the editor (i) add :/data/data/com.termux/files/usr/lib64 to the LD_LIBRARY_PATH which then should read as follows:
 
-    export PATH=~/llvm3.9.1/build/bin:$PATH
+    export PATH=/data/data/com.termux/files/home/llvm3.9.1/build/bin:$PATH
     export LD_LIBRARY_PATH=/system/lib64:/data/data/com.termux/files/usr/lib:/data/data/com.termux/files/local/cuda/lib64:/system/vendor/lib64:/data/data/com.termux/files/usr/lib64
 
 Then close the file with Ctrl+c :wq ENTER. 
