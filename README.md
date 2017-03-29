@@ -1,10 +1,10 @@
-#Compiling and running CUDA applications on the Google Pixel C using the GPUCC feature of clang, ptxas and fatbinary
+# Compiling and running CUDA applications on the Google Pixel C using the GPUCC feature of clang, ptxas and fatbinary
 
 One of the features for considering  a Pixel C is the NVIDIA Tegra X1 processor and its GPU that features 256 Maxwell CUDA cores. There are not many devices with the Tegra X1 in the portable category. By building a productivity device Google might cater here to the casual CUDA C++, PTX and MAXAS coder community that are now free to code away from home and internet. The device is potentially of high therapeutic value for CUDA addicts, for which there can be no cure obviously, but cannot be clinically certified until the Pixel C does CUDA.
 
 As of writing, the Pixel C comes with Android Nougat 7.1.1, which includes CUDA 7.5. Oddly enough CUDA is somewhat hidden. The intention of this text is to assist with getting CUDA 7.0 running with small adaptations and some limitations (see below). You will be able to write, compile and run CUDA C++ code directly on the tablet without the need of any other computer. The strategy works in an Android terminal without root and has no graphical IDE.
 
-##Install Termux by Fredrik Fornwall from the google play store
+## Install Termux by Fredrik Fornwall from the google play store
 https://play.google.com/store/apps/details?id=com.termux
 
 Running Termux opens an Android Terminal with a shell command prompt. This Android shell  features many commands known from Linux distributions. It also comes with a range of packages that have been cross-compiled from Linux to run on native Android, see more at: https://termux.com/
@@ -12,7 +12,7 @@ Running Termux opens an Android Terminal with a shell command prompt. This Andro
 Follow the Termux online help to setup storage and preferences:
 https://termux.com/help.html
 
-##Building LLVM and clang with support for CUDA C++ and the NVPTX backend
+## Building LLVM and clang with support for CUDA C++ and the NVPTX backend
 
 Termux already comes with a package of clang 3.9.1, which will compile CUDA C++ to LLVM intermediate representation (IR) code but you will need the LLVM NVPTX backend to make PTX files. In addition the ptxas and fatbinary executables from the NVIDIA Linux for Tegra X1 toolkit need to be interfaced to run on Android to generate device code that can be embedded with your executables.
 
@@ -103,7 +103,7 @@ Use source to invoke the script to switch to CUDA development:
 . ~/normal
 ```
 
-##NVIDIA CUDA for Android
+## NVIDIA CUDA for Android
 
 Nvidia provides support for CUDA development for Android in their CodeWorks for Android toolkit:
 https://developer.nvidia.com/codeworks-android
@@ -204,7 +204,7 @@ vectorAdd_kernel.bc LLVM IR byte code can be passed to the NVPTX backend:
 llc -mtriple=nvptx64-nvidia-cuda -filetype=asm vectorAdd_kernel.bc -o vectorAdd_kernel64.ptx
 ```
 
-##NVIDIA Linux for Tegra
+## NVIDIA Linux for Tegra
 
 We are presently stuck at PTX and cannot go any further with open source tools. NVIDIA also does not supply CUDA compiler components that run natively on Android (the toolkit contains only profiling and analysis tools ported to Android). However, there are ARM64 versions for the Tegra X1 in the Linux for Tegra Archive: 
 
@@ -304,16 +304,16 @@ An executable file vectorAdd should have been generated that can be run with:
 An output ending with "Test PASSED Done" is an encouraging sign and you can take it from there. Good luck! The Pixel C CUDA strategy would have been all but impossible if not for Amy Wong, Fredrik Fornwall, and visionary teams at NVIDIA and Google. Thanks!
 
 
-##Limitations
+## Limitations
 
-###CUDA 7.5 on the Pixel C
+### CUDA 7.5 on the Pixel C
 CUDA 7.0 is the latest version of libcudart.so in the NVIDIA Codeworks for Android toolkit. We  need to wait on a newer CUDA runtime library for Android and cannot use a the newer versions from the Linux for Tegra development kit as these ELFs will not work with libnvcompute.so on the Pixel C. Therefore the device code NVVM library is only available up to Compute Capability 3.5 (Tegra X1 has Compute Capability 5.3) and 16 bit floats are missing.
 
-###32 bit armv7l CUDA applications on the Pixel C
+### 32 bit armv7l CUDA applications on the Pixel C
 Google Pixel C has support for armv7l libraries including a 32-bit version of libnvcompute.so in /system/vendor/lib, which can be used to run armv7l CUDA applications. Compiling 32-bit CUDA requires the armv7l libraries from the Codeworks for Android CUDA development kit, changes to the clang command line arguments, and setting LD_LIBRARY_PATH to point at the /system/lib;/system/vendor/lib folders.
 
-###Cuda streams other then the default stream do not work for kernel execution
+### Cuda streams other then the default stream do not work for kernel execution
 Compiling of the concurrentKernels.cu sample works. However, it appears that streams in the kernel launch command are not working. Whereas streams can be specified for memory copies, adding a stream parameter to the <<<..., cuda_stream>>> command appears to make the kernel not run. Oddly the kernel launch passes silently generating neither an error nor any output. This is a limitation that could be related to the implementation in libnvcompute.so and likely will not be corrected as there is no official CUDA support. Preliminary tests indicate that this limitation (it is not a bug as there is no official CUDA on the Pixel C) is independent of LLVM and also occurs with nvcc (prooted from the L4T version from Jetpack 2.2; CUDA 7.0).
 
-###CUDA sample matrixMul has a long execution time or hangs
+### CUDA sample matrixMul has a long execution time or hangs
 Compiling the matrixMul.cu sample works. However, executing matrixMul has a long runtime or hangs. This appears a problem with LLVM as the same code compiled with nvcc (prooted from the L4T from Jetpack 2.2; CUDA 7.0) runs normally. Investigating the problem shows that the program hangs at cudaDeviceSynchronize() after the first kernel launch in the warm up section completes apparently normally. It is not clear, what the reason for this is but could be related to specifics of Tegra devices and the memory space that GPU and CPU share. Notably, this CUDA sample relies on a large number of kernel launches. LLVM handle the reuse of kernels or the CUDA cache differently than nvcc. However, the CUDA cache is handled by the driver and the problem clearly occurs before kernel relaunch making this scenario rather unlikely.
